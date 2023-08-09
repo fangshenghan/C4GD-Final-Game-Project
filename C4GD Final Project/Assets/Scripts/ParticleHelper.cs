@@ -63,7 +63,7 @@ public class ParticleHelper : MonoBehaviour
         {
             DynamicParticle dp = allParticles[i];
             dp.adjacentLayer = layer;
-            if (getDistanceSq(dp, origin) < 0.5F * 0.5F)
+            if (getDistanceSq(dp, origin) < 1F * 1F)
             {
                 adjacentParticles.Add(dp);
                 allParticles.RemoveAt(i);

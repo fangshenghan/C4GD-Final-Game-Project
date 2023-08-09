@@ -13,7 +13,7 @@ using System.Collections;
 
 public class DynamicParticle : MonoBehaviour {	
 	public enum STATES{WATER,GAS,LAVA,NONE}; //The 3 states of the particle
-	STATES currentState=STATES.NONE; //Defines the currentstate of the particle, default is water
+	public STATES currentState=STATES.NONE; //Defines the currentstate of the particle, default is water
 	public GameObject currentImage; //The image is for the metaball shader for the effect, it is onle seen by the liquids camera.
 	public GameObject[] particleImages; //We need multiple particle images to reduce drawcalls
 	float GAS_FLOATABILITY=1.0f; //How fast does the gas goes up?
