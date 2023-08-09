@@ -17,7 +17,7 @@ public class LeverScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        door = transform.parent.gameObject.transform.Find("Door").gameObject;
+        door = transform.parent.gameObject.transform.Find("DoorTiles").gameObject;
         sr = GetComponent<SpriteRenderer>();
     }
 
