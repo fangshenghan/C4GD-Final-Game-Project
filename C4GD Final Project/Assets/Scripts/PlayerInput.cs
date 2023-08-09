@@ -102,7 +102,20 @@ public class PlayerInput : MonoBehaviour
 
         
         
+        if (isMoving && enemyTransform != null)
+        {
+            // Calculate the target position based on the enemy's position
+            Vector3 targetPosition = new Vector3(enemyTransform.position.x + (transform.position.x < enemyTransform.position.x ? -8f : 8f), transform.position.y, transform.position.z);
 
+            // Move the player towards the target position at the specified speed
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, 15 * Time.deltaTime);
+
+            // Check if the player has reached the target position
+            if (transform.position == targetPosition)
+            {
+                isMoving = false;
+            }
+        }
 
 
 
@@ -142,17 +155,10 @@ public class PlayerInput : MonoBehaviour
     }
 
     
-
-    public bool GetIfEnterBoss1Area()
+    public void MovePlayerTowardsEnemy(Transform enemyTransform)
     {
-        return !notInBoss1Area;
-    }
-    public bool GetIfEnterBoss2Area()
-    {
-        return !notInBoss2Area;
-    }
-    public bool GetIfEnterFinalBossArea(){
-        return !notInFinalBoss;
+        this.enemyTransform = enemyTransform;
+        isMoving = true;
     }
     
 
@@ -284,6 +290,8 @@ public class PlayerInput : MonoBehaviour
     public void OnGround(){
         inAir = false;
     }
+
+    
 
 }
 

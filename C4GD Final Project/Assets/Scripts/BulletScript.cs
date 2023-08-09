@@ -26,6 +26,9 @@ public class BulletScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject other = collision.gameObject;
+        if(other.CompareTag("ground")){
+            Destroy(gameObject);
+        }
         if (other.CompareTag("DynamicParticle"))
         {
             Destroy(gameObject);
