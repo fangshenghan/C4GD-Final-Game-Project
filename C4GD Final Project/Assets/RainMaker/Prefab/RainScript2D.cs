@@ -218,5 +218,9 @@ namespace DigitalRuby.RainMaker
                 return false;
             }
         }
+
+        public void IncreaseIntensity(){
+            RainIntensity += 0.1f;
+        }
     }
 }

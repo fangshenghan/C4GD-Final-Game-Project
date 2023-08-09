@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DigitalRuby.RainMaker;
 public class GunEvent : MonoBehaviour
 {
     [SerializeField] Transform gunTip;
@@ -14,7 +14,12 @@ public class GunEvent : MonoBehaviour
     Vector2 lookDirection;
     float lookAngle;
     bool rifled, canShoot;
+    public GameObject rain;
+    public RainScript2D rainScript2D;
 
+    void start(){
+        rainScript2D = rain.GetComponent<RainScript2D>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -51,6 +56,7 @@ public class GunEvent : MonoBehaviour
         GameObject fireBullet = Instantiate(bullet, gunTip.position, gunTip.rotation);
         fireBullet.GetComponent<Rigidbody2D>().velocity = gunTip.up * bulletSpeed;
         Destroy(fireBullet, 10);
+        rainScript2D.IncreaseIntensity();
         //StartCoroutine(waitBetwnShots());
         //FireBullet();
     }
