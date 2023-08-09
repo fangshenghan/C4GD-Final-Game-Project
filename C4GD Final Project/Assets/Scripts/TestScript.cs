@@ -6,11 +6,12 @@ using static DynamicParticle;
 
 public class TestScript : MonoBehaviour
 {
+    public Tilemap tm;
+
     // Start is called before the first frame update
     void Start()
     {
-        /*Tilemap tm = GetComponent<Tilemap>();
-        tm.SetTile(new Vector3Int(0, 0, 0), null);*/
+
     }
 
 
