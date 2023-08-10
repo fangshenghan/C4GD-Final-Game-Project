@@ -19,12 +19,12 @@ public class CheckpointScript : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("checkpoint");
         if (collision.gameObject.CompareTag("player"))
         {
             spawnPos = player.transform.position;
-            GetComponent<SpriteRenderer>().color = Color.green;
         }
     }
 }
