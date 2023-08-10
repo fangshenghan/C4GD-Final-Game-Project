@@ -7,6 +7,12 @@ using UnityEngine.Tilemaps;
 public class BulletScript : MonoBehaviour
 {
     public Tilemap oceanMap;
+    public bool coldBullet;
+    public bool hotBullet;
+    public GameObject platformRed;
+    public GameObject platformBlue;
+
+    private Vector3 platformTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +32,7 @@ public class BulletScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject other = collision.gameObject;
-        if(other.CompareTag("ground")){
-            Destroy(gameObject);
-        }
+        
         if (other.CompareTag("DynamicParticle"))
         {
             Destroy(gameObject);
@@ -74,6 +78,28 @@ public class BulletScript : MonoBehaviour
                 other.transform.position = pos;
             }
         }
+        if(other.CompareTag("enemyIceBullet") && coldBullet){
+            Debug.Log("cold");
+            platformTransform = other.transform.position;
+            Instantiate(platformBlue, platformTransform, platformBlue.transform.rotation);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+
+        }
+        if(other.CompareTag("enemyFireBullet") && hotBullet){
+            Debug.Log("hot");
+            platformTransform = other.transform.position;
+            Instantiate(platformRed, platformTransform, platformRed.transform.rotation);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
+        if(other.CompareTag("platformBlue") && hotBullet){
+            Destroy(other.gameObject);
+        }
+        if(other.CompareTag("platformRed") && coldBullet){
+            Destroy(other.gameObject);
+        }
+        Destroy(gameObject);
     }
 
 }

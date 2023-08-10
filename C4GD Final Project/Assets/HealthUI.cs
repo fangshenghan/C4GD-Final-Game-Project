@@ -13,10 +13,14 @@ public class HealthUI : MonoBehaviour
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
+    public Animator animator;
+
     //Health health;
 
     
-    
+    void start(){
+        animator = gameObject.GetComponent<Animator>();
+    }
     
 
     void Update(){
@@ -41,6 +45,11 @@ public class HealthUI : MonoBehaviour
             else{
                 hearts[i].enabled = false;
             }
+        }
+        if(health == 0){
+
+            animator.SetBool("dead", true);
+
         }
 
     }
