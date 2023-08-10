@@ -4,13 +4,11 @@ using UnityEngine;
 using DigitalRuby.RainMaker;
 public class GunEvent : MonoBehaviour
 {
-    [SerializeField] Transform gunTipHot;
-    [SerializeField] Transform gunTipCold;
-    [SerializeField] GameObject hotBullet;
-    [SerializeField] GameObject coldBullet;
+    [SerializeField] Transform gunTip;
+    [SerializeField] GameObject bullet;
     [SerializeField] float bulletSpeed = 10f;
-    [SerializeField] GameObject coldGun;
-    [SerializeField] GameObject hotGun;
+    [SerializeField] GameObject gun1;
+    [SerializeField] GameObject gun2;
     [SerializeField] float timeBetweenBullets = 0.2f;
 
     Vector2 lookDirection;
@@ -33,19 +31,7 @@ public class GunEvent : MonoBehaviour
         if (gun2.activeSelf){
             rifled = true;
         }
-
-        
 */
-        if(Input.GetKeyDown(KeyCode.E)){
-            if(coldGun.active){
-                coldGun.SetActive(false);
-                hotGun.SetActive(true);
-            }
-            else{
-                coldGun.SetActive(true);
-                hotGun.SetActive(false);
-            }
-        }
 
         if (Input.GetMouseButtonDown(0) && !rifled)
         {
@@ -67,15 +53,8 @@ public class GunEvent : MonoBehaviour
     
     void FireNormalBullet()
     {
-        GameObject fireBullet;
-        if(hotGun.active){
-            fireBullet = Instantiate(hotBullet, gunTipHot.position, gunTipHot.rotation);
-        }
-        else{
-            fireBullet = Instantiate(coldBullet, gunTipCold.position, gunTipCold.rotation);
-        }
-        
-        fireBullet.GetComponent<Rigidbody2D>().velocity = lookDirection.normalized * bulletSpeed;
+        GameObject fireBullet = Instantiate(bullet, gunTip.position, gunTip.rotation);
+        fireBullet.GetComponent<Rigidbody2D>().velocity = gunTip.up * bulletSpeed;
         Destroy(fireBullet, 10);
         rainScript2D.IncreaseIntensity();
         //StartCoroutine(waitBetwnShots());
@@ -92,8 +71,8 @@ public class GunEvent : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             
-            GameObject rifleBullet = Instantiate(hotBullet, gunTipHot.position, gunTipHot.rotation);
-            rifleBullet.GetComponent<Rigidbody2D>().velocity = gunTipHot.up * bulletSpeed;
+            GameObject rifleBullet = Instantiate(bullet, gunTip.position, gunTip.rotation);
+            rifleBullet.GetComponent<Rigidbody2D>().velocity = gunTip.up * bulletSpeed;
             yield return new WaitForSeconds(timeBetweenBullets);
         }
 

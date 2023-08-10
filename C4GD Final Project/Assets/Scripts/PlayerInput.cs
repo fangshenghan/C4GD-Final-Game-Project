@@ -44,8 +44,6 @@ public class PlayerInput : MonoBehaviour
 
     Vector3 initialLocalScale;
     public GameObject myGun;
-    //public GameObject coldGun;
-    //public GameObject hotGun;
     public bool notInBoss1Area = true;
     public bool notInBoss2Area = true;
     public bool notInLevel3 = true;
@@ -61,20 +59,14 @@ public class PlayerInput : MonoBehaviour
 
     public Animator animator;
     private bool canMouseFlip = true;
-
-    public GameObject VMCam;
-    private MyCameraSwitcher myCameraSwitcher;
-    private HealthUI healthUI;
     
 
     void Start() 
     {
-        healthUI = GetComponent<HealthUI>();
         myRigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
         initialLocalScale = transform.localScale;
-        myCameraSwitcher = VMCam.GetComponent<MyCameraSwitcher>();
 
 
         //feetCollider = transform.Find("FeetCollider").GetComponent<BoxCollider2D>();
@@ -88,17 +80,8 @@ public class PlayerInput : MonoBehaviour
         animator.SetFloat("speed", Math.Abs(moveInput.x * playerMoveSpeed));
 
         if(myRigidbody.velocity.x == 0f && myRigidbody.velocity.y == 0f){
-            /*
-            if(hotGun.active){
-                hotGun.SetActive(false);
-            }
-            else{
-                coldGun.SetActive(false);
-            }
-            */
             myGun.SetActive(true);
             canMouseFlip = true;
-            
         }
         else{
             myGun.SetActive(false);
@@ -119,20 +102,7 @@ public class PlayerInput : MonoBehaviour
 
         
         
-        if (isMoving && enemyTransform != null)
-        {
-            // Calculate the target position based on the enemy's position
-            Vector3 targetPosition = new Vector3(enemyTransform.position.x + (transform.position.x < enemyTransform.position.x ? -8f : 8f), transform.position.y, transform.position.z);
 
-            // Move the player towards the target position at the specified speed
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, 15 * Time.deltaTime);
-
-            // Check if the player has reached the target position
-            if (transform.position == targetPosition)
-            {
-                isMoving = false;
-            }
-        }
 
 
 
@@ -154,7 +124,15 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    
+    /*
+
+    public void MovePlayerTowardsEnemy(Transform enemyTransform)
+    {
+        this.enemyTransform = enemyTransform;
+        isMoving = true;
+    }
+
+        */
     
     
 
@@ -164,10 +142,17 @@ public class PlayerInput : MonoBehaviour
     }
 
     
-    public void MovePlayerTowardsEnemy(Transform enemyTransform)
+
+    public bool GetIfEnterBoss1Area()
     {
-        this.enemyTransform = enemyTransform;
-        isMoving = true;
+        return !notInBoss1Area;
+    }
+    public bool GetIfEnterBoss2Area()
+    {
+        return !notInBoss2Area;
+    }
+    public bool GetIfEnterFinalBossArea(){
+        return !notInFinalBoss;
     }
     
 
@@ -215,27 +200,9 @@ public class PlayerInput : MonoBehaviour
     }
     */
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.CompareTag("redMonster1")){
-            myCameraSwitcher.ChangeToRedMonster1();
-        }
-        
-    }
-
-    private void OnCollisionEnter2D(Collision2D other){
-        if(other.gameObject.CompareTag("enemyFireBullet")){
-            healthUI.attack(1);
-            Destroy(other.gameObject);
-        }
-        if(other.gameObject.CompareTag("enemyIceBullet")){
-            healthUI.attack(1);
-            Destroy(other.gameObject);
-        }
-    }
-
     void OnJump(InputValue value)
     {
-        if(value.isPressed && !inAir)
+        if(value.isPressed)
         {
             animator.SetBool("inAir", true);
             isJumping = true;
@@ -317,8 +284,6 @@ public class PlayerInput : MonoBehaviour
     public void OnGround(){
         inAir = false;
     }
-
-    
 
 }
 
