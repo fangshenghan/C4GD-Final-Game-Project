@@ -6,12 +6,12 @@ using UnityEngine.Tilemaps;
 
 public class BulletScript : MonoBehaviour
 {
-    public Tilemap oceanMap;
+    private Tilemap oceanMap;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        oceanMap = GameObject.Find("Ocean Tilemap").GetComponent<Tilemap>();
     }
 
     // Update is called once per frame
@@ -19,9 +19,6 @@ public class BulletScript : MonoBehaviour
     {
         
     }
-
-    private int oceanLayerHealth = 3;
-    public TileBase oceanHealth2, oceanHealth1;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -43,41 +40,16 @@ public class BulletScript : MonoBehaviour
         else if (other.CompareTag("OceanCollider"))
         {
             int y = (int)other.transform.position.y;
-            oceanLayerHealth--;
-            if (oceanLayerHealth == 2)
+            for (int x = -10; x <= 40; x++)
             {
-                for (int x = -10; x <= 10; x++)
+                if (oceanMap.HasTile(new Vector3Int(x, (y / 4) - 1)))
                 {
-                    if (oceanMap.HasTile(new Vector3Int(x, y - 1)))
-                    {
-                        oceanMap.SetTile(new Vector3Int(x, y - 1), oceanHealth2);
-                    }
+                    oceanMap.SetTile(new Vector3Int(x, (y / 4) - 1), null);
                 }
             }
-            else if (oceanLayerHealth == 1)
-            {
-                for (int x = -10; x <= 10; x++)
-                {
-                    if (oceanMap.HasTile(new Vector3Int(x, y - 1)))
-                    {
-                        oceanMap.SetTile(new Vector3Int(x, y - 1), oceanHealth1);
-                    }
-                }
-            }
-            else
-            {
-                for (int x = -10; x <= 10; x++)
-                {
-                    if (oceanMap.HasTile(new Vector3Int(x, y - 1)))
-                    {
-                        oceanMap.SetTile(new Vector3Int(x, y - 1), null);
-                    }
-                }
-                oceanLayerHealth = 3;
-                Vector3 pos = other.transform.position;
-                pos.y--;
-                other.transform.position = pos;
-            }
+            Vector3 pos = other.transform.position;
+            pos.y -= 4;
+            other.transform.position = pos;
         }
     }
 
