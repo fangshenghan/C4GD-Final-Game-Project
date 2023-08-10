@@ -32,51 +32,33 @@ public class BulletScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject other = collision.gameObject;
-        
         if (other.CompareTag("DynamicParticle"))
         {
             Destroy(gameObject);
-            List<DynamicParticle> particles = ParticleHelper.findAllAdjacentParticles(collision.gameObject.GetComponent<DynamicParticle>());
-            ParticleHelper.changeParticlesToState(particles, DynamicParticle.STATES.GAS, 80L);
+            DynamicParticle dp = collision.gameObject.GetComponent<DynamicParticle>();
+            if (dp.currentState == DynamicParticle.STATES.WATER)
+            {
+                List<DynamicParticle> particles = ParticleHelper.findAllAdjacentParticles(dp, 10000);
+                ParticleHelper.changeParticlesToState(particles, DynamicParticle.STATES.GAS, 50L);
+            }else if (dp.currentState == DynamicParticle.STATES.GAS)
+            {
+                List<DynamicParticle> particles = ParticleHelper.findAllAdjacentParticles(dp, 10000);
+                ParticleHelper.changeParticlesToState(particles, DynamicParticle.STATES.WATER, 50L);
+            }
         }
         else if (other.CompareTag("OceanCollider"))
         {
             int y = (int)other.transform.position.y;
-            oceanLayerHealth--;
-            if (oceanLayerHealth == 2)
+            for (int x = -10; x <= 40; x++)
             {
-                for (int x = -10; x <= 10; x++)
+                if (oceanMap.HasTile(new Vector3Int(x, (y / 4) - 1)))
                 {
-                    if (oceanMap.HasTile(new Vector3Int(x, y - 1)))
-                    {
-                        oceanMap.SetTile(new Vector3Int(x, y - 1), oceanHealth2);
-                    }
+                    oceanMap.SetTile(new Vector3Int(x, (y / 4) - 1), null);
                 }
             }
-            else if (oceanLayerHealth == 1)
-            {
-                for (int x = -10; x <= 10; x++)
-                {
-                    if (oceanMap.HasTile(new Vector3Int(x, y - 1)))
-                    {
-                        oceanMap.SetTile(new Vector3Int(x, y - 1), oceanHealth1);
-                    }
-                }
-            }
-            else
-            {
-                for (int x = -10; x <= 10; x++)
-                {
-                    if (oceanMap.HasTile(new Vector3Int(x, y - 1)))
-                    {
-                        oceanMap.SetTile(new Vector3Int(x, y - 1), null);
-                    }
-                }
-                oceanLayerHealth = 3;
-                Vector3 pos = other.transform.position;
-                pos.y--;
-                other.transform.position = pos;
-            }
+            Vector3 pos = other.transform.position;
+            pos.y -= 4;
+            other.transform.position = pos;
         }
         if(other.CompareTag("enemyIceBullet") && coldBullet){
             Debug.Log("cold");
