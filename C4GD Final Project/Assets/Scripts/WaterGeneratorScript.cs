@@ -14,16 +14,15 @@ public class WaterGeneratorScript : MonoBehaviour
         {
             float deltaX = go.transform.localScale.x / 2;
             float deltaY = go.transform.localScale.y / 2;
-            float startX = go.transform.position.x - deltaX + 0.05F;
-            float startY = go.transform.position.y - deltaY + 0.05F;
-            float endX = go.transform.position.x + deltaX - 0.05F;
-            float endY = go.transform.position.y + deltaY - 0.05F;
-            //Debug.Log(startX + " " + startY + " " + endX + " " + endY);
-            for (;startX <= endX; startX += 0.025F)
+            float startX = go.transform.position.x - deltaX + 0.1F;
+            float startY = go.transform.position.y - deltaY + 0.1F;
+            float endX = go.transform.position.x + deltaX - 0.1F;
+            float endY = go.transform.position.y + deltaY - 0.1F;
+            for (float x = startX; x <= endX; x += 0.8F)
             {
-                for (; startY <= endY; startY += 0.025F)
+                for (float y = startY; y <= endY; y += 0.8F)
                 {
-                    GameObject newLiquidParticle = (GameObject)Instantiate(Resources.Load("LiquidPhysics/DynamicParticle"), new Vector3(startX, startY, 0), transform.rotation);
+                    GameObject newLiquidParticle = (GameObject)Instantiate(Resources.Load("LiquidPhysics/DynamicParticle"), new Vector3(x, y, 0), transform.rotation);
                     DynamicParticle particleScript = newLiquidParticle.GetComponent<DynamicParticle>();
                     particleScript.SetLifeTime(1000000);
                     particleScript.SetState(STATES.WATER);
@@ -39,10 +38,7 @@ public class WaterGeneratorScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            foreach (DynamicParticle dp in FindObjectsOfType<DynamicParticle>())
-            {
-                dp.SetState(DynamicParticle.STATES.GAS);
-            }
+            
         }
     }
 }

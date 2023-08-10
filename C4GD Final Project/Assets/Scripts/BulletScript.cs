@@ -29,8 +29,16 @@ public class BulletScript : MonoBehaviour
         if (other.CompareTag("DynamicParticle"))
         {
             Destroy(gameObject);
-            List<DynamicParticle> particles = ParticleHelper.findAllAdjacentParticles(collision.gameObject.GetComponent<DynamicParticle>());
-            ParticleHelper.changeParticlesToState(particles, DynamicParticle.STATES.GAS, 80L);
+            DynamicParticle dp = collision.gameObject.GetComponent<DynamicParticle>();
+            if (dp.currentState == DynamicParticle.STATES.WATER)
+            {
+                List<DynamicParticle> particles = ParticleHelper.findAllAdjacentParticles(dp, 10000);
+                ParticleHelper.changeParticlesToState(particles, DynamicParticle.STATES.GAS, 50L);
+            }else if (dp.currentState == DynamicParticle.STATES.GAS)
+            {
+                List<DynamicParticle> particles = ParticleHelper.findAllAdjacentParticles(dp, 10000);
+                ParticleHelper.changeParticlesToState(particles, DynamicParticle.STATES.WATER, 50L);
+            }
         }
         else if (other.CompareTag("OceanCollider"))
         {
