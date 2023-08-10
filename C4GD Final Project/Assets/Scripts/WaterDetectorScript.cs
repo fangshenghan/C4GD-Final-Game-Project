@@ -9,7 +9,7 @@ public class WaterDetectorScript : MonoBehaviour
     private bool isDetectorOn = false;
 
     private float doorYTarget = 0F, doorXTarget = 0F;
-    private float doorMoveSpeed = 10F;
+    private float doorMoveSpeed = 15F;
 
     public float doorOpenY, doorOpenX;
     public Sprite detector_on, detector_off;

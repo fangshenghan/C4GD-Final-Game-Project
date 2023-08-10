@@ -59,18 +59,21 @@ public class LeverScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isLeverOn)
+        if (collision.gameObject.CompareTag("Bullet"))
         {
-            sr.sprite = lever_off;
-            doorYTarget = 0F;
-            doorXTarget = 0F;
+            if (isLeverOn)
+            {
+                sr.sprite = lever_off;
+                doorYTarget = 0F;
+                doorXTarget = 0F;
+            }
+            else
+            {
+                sr.sprite = lever_on;
+                doorXTarget = doorOpenX;
+                doorYTarget = doorOpenY;
+            }
+            isLeverOn = !isLeverOn;
         }
-        else
-        {
-            sr.sprite = lever_on;
-            doorXTarget = doorOpenX;
-            doorYTarget = doorOpenY;
-        }
-        isLeverOn = !isLeverOn;
     }
 }

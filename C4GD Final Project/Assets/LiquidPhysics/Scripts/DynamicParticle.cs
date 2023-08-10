@@ -17,7 +17,7 @@ public class DynamicParticle : MonoBehaviour {
 	public GameObject currentImage; //The image is for the metaball shader for the effect, it is onle seen by the liquids camera.
 	public GameObject[] particleImages; //We need multiple particle images to reduce drawcalls
 	float GAS_FLOATABILITY=1.0f; //How fast does the gas goes up?
-	float particleLifeTime=3.0f,startTime;//How much time before the particle scalesdown and dies	
+	float particleLifeTime=1000000f,startTime;//How much time before the particle scalesdown and dies	
 
 	public int adjacentLayer = 0;
 
@@ -32,15 +32,16 @@ public class DynamicParticle : MonoBehaviour {
 			switch(newState){
 				case STATES.WATER:													
 					GetComponent<Rigidbody2D>().gravityScale=1.0f; // To simulate Water density
-				break;
+					gameObject.layer = LayerMask.NameToLayer("Liquid");
+					break;
 				case STATES.GAS:		
-					particleLifeTime=particleLifeTime/2.0f;	// Gas lives the time the other particles
 					GetComponent<Rigidbody2D>().gravityScale=0.0f;// To simulate Gas density
-					gameObject.layer=LayerMask.NameToLayer("Gas");// To have a different collision layer than the other particles (so gas doesnt rises up the lava but still collides with the wolrd)
+					gameObject.layer = LayerMask.NameToLayer("Gas");// To have a different collision layer than the other particles (so gas doesnt rises up the lava but still collides with the wolrd)
 				break;					
 				case STATES.LAVA:
 					GetComponent<Rigidbody2D>().gravityScale=0.3f; // To simulate the lava density
-				break;	
+					gameObject.layer = LayerMask.NameToLayer("Liquid");
+					break;	
 				case STATES.NONE:
 					Destroy(gameObject);
 				break;
@@ -67,7 +68,7 @@ public class DynamicParticle : MonoBehaviour {
 			break;
 			case STATES.GAS:
 				if(GetComponent<Rigidbody2D>().velocity.y<50){ //Limits the speed in Y to avoid reaching mach 7 in speed
-					GetComponent<Rigidbody2D>().AddForce (new Vector2(0,GAS_FLOATABILITY)); // Gas always goes upwards
+					GetComponent<Rigidbody2D>().AddForce (new Vector2(0.05F, GAS_FLOATABILITY)); // Gas always goes upwards
 				}
 				ScaleDown();
 			break;
@@ -84,7 +85,7 @@ public class DynamicParticle : MonoBehaviour {
 	}
 	// The effect for the particle to seem to fade away
 	void ScaleDown(){ 
-		float scaleValue = 1.0f-((Time.time-startTime)/particleLifeTime);
+		float scaleValue = 4.0f-((Time.time-startTime)/particleLifeTime);
 		Vector2 particleScale=Vector2.one;
 		if (scaleValue <= 0) {
 						Destroy (gameObject);
