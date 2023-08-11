@@ -59,7 +59,8 @@ public class LeverScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        Debug.Log("collision");
+        if (collision.gameObject.CompareTag("coldBullet") || collision.gameObject.CompareTag("hotBullet"))
         {
             if (isLeverOn)
             {

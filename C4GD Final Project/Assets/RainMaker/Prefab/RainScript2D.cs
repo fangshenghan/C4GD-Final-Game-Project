@@ -220,7 +220,7 @@ namespace DigitalRuby.RainMaker
         }
 
         public void IncreaseIntensity(){
-            RainIntensity += 0.1f;
+            RainIntensity += 0.04f;
         }
     }
 }

@@ -49,12 +49,12 @@ public class ParticleHelper : MonoBehaviour
     public static List<DynamicParticle> findAllAdjacentParticles(DynamicParticle origin, float maxDistance)
     {
         allParticles = new List<DynamicParticle>(GameObject.FindObjectsOfType<DynamicParticle>());
-        List<DynamicParticle> adjacentParticles = findAllAdjacentParticlesRecursion(origin, 1, maxDistance);
+        List<DynamicParticle> adjacentParticles = findAllAdjacentParticlesRecursion(origin, origin, 1, maxDistance);
         adjacentParticles.Sort((x, y) => x.adjacentLayer.CompareTo(y.adjacentLayer));
         return adjacentParticles;
     }
 
-    private static List<DynamicParticle> findAllAdjacentParticlesRecursion(DynamicParticle origin, int layer, float maxDistance)
+    private static List<DynamicParticle> findAllAdjacentParticlesRecursion(DynamicParticle first, DynamicParticle origin, int layer, float maxDistance)
     {
         //allParticles.Sort((x, y) => getDistanceSq(origin, x).CompareTo(getDistanceSq(origin, y)));
         List<DynamicParticle> adjacentParticles = new List<DynamicParticle>();
@@ -63,7 +63,8 @@ public class ParticleHelper : MonoBehaviour
         {
             DynamicParticle dp = allParticles[i];
             dp.adjacentLayer = layer;
-            if (dp.currentState == allParticles[i].currentState && getDistanceSq(dp, origin) < 2.5F * 2.5F && getDistanceSq(dp, origin) < maxDistance * maxDistance)
+            if (dp.currentState == allParticles[i].currentState && getDistanceSq(dp, origin) < 2.5F * 2.5F && 
+            getDistanceSq(dp, first) < maxDistance * maxDistance)
             {
                 adjacentParticles.Add(dp);
                 allParticles.RemoveAt(i);
@@ -73,7 +74,7 @@ public class ParticleHelper : MonoBehaviour
 
         foreach (DynamicParticle dp in new List<DynamicParticle>(adjacentParticles))
         {
-            adjacentParticles.AddRange(findAllAdjacentParticlesRecursion(dp, layer + 1, maxDistance));
+            adjacentParticles.AddRange(findAllAdjacentParticlesRecursion(first, dp, layer + 1, maxDistance));
         }
 
         return adjacentParticles;

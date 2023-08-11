@@ -18,9 +18,9 @@ public class WaterGeneratorScript : MonoBehaviour
             float startY = go.transform.position.y - deltaY + 0.1F;
             float endX = go.transform.position.x + deltaX - 0.1F;
             float endY = go.transform.position.y + deltaY - 0.1F;
-            for (float x = startX; x <= endX; x += 0.8F)
+            for (float x = startX; x <= endX; x += 1F)
             {
-                for (float y = startY; y <= endY; y += 0.8F)
+                for (float y = startY; y <= endY; y += 1F)
                 {
                     GameObject newLiquidParticle = (GameObject)Instantiate(Resources.Load("LiquidPhysics/DynamicParticle"), new Vector3(x, y, 0), transform.rotation);
                     DynamicParticle particleScript = newLiquidParticle.GetComponent<DynamicParticle>();

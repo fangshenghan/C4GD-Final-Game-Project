@@ -4,11 +4,13 @@ using UnityEngine;
 using DigitalRuby.RainMaker;
 public class GunEvent : MonoBehaviour
 {
-    [SerializeField] Transform gunTip;
-    [SerializeField] GameObject bullet;
+    [SerializeField] Transform gunTipHot;
+    [SerializeField] Transform gunTipCold;
+    [SerializeField] GameObject hotBullet;
+    [SerializeField] GameObject coldBullet;
     [SerializeField] float bulletSpeed = 10f;
-    [SerializeField] GameObject gun1;
-    [SerializeField] GameObject gun2;
+    [SerializeField] GameObject coldGun;
+    [SerializeField] GameObject hotGun;
     [SerializeField] float timeBetweenBullets = 0.2f;
 
     Vector2 lookDirection;
@@ -16,10 +18,13 @@ public class GunEvent : MonoBehaviour
     bool rifled, canShoot;
     public GameObject rain;
     public RainScript2D rainScript2D;
+    public static bool ableToChangeMode;
+    public audioPlayer audioPlayer;
 
     void start(){
         rainScript2D = rain.GetComponent<RainScript2D>();
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -31,12 +36,34 @@ public class GunEvent : MonoBehaviour
         if (gun2.activeSelf){
             rifled = true;
         }
+
+        
 */
+
+
+        if(Input.GetKeyDown(KeyCode.E) && ableToChangeMode){
+            audioPlayer.PlayGunSwitchAudio();
+            if(coldGun.active){
+                coldGun.SetActive(false);
+                hotGun.SetActive(true);
+                
+            }
+            else{
+                coldGun.SetActive(true);
+                hotGun.SetActive(false);
+            }
+        }
+
+        if(!StaticVars.cutsceneDone){
+            coldGun.SetActive(false);
+            hotGun.SetActive(false);
+        }
 
         if (Input.GetMouseButtonDown(0) && !rifled)
         {
             //Pistol Bullet
             //StartCoroutine(ShootBullets());
+            audioPlayer.PlayHitAudio();
             FireNormalBullet();
         }
         else if (Input.GetMouseButtonDown(0) && rifled)
@@ -44,6 +71,8 @@ public class GunEvent : MonoBehaviour
             //Rifle Bullet
             FireRifleBullet();
         }
+
+        
     }
 
     void FireRifleBullet()
@@ -53,14 +82,20 @@ public class GunEvent : MonoBehaviour
     
     void FireNormalBullet()
     {
-        GameObject fireBullet = Instantiate(bullet, gunTip.position, gunTip.rotation);
-        fireBullet.GetComponent<Rigidbody2D>().velocity = gunTip.up * bulletSpeed;
+        GameObject fireBullet;
+        if(hotGun.active){
+            fireBullet = Instantiate(hotBullet, gunTipHot.position, gunTipHot.rotation);
+        }
+        else
+        {
+            fireBullet = Instantiate(coldBullet, gunTipCold.position, gunTipCold.rotation);
+        }
+        
+        fireBullet.GetComponent<Rigidbody2D>().velocity = lookDirection.normalized * bulletSpeed;
         Destroy(fireBullet, 10);
-        rainScript2D.IncreaseIntensity();
         //StartCoroutine(waitBetwnShots());
         //FireBullet();
     }
-
 
    
 
@@ -71,12 +106,16 @@ public class GunEvent : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             
-            GameObject rifleBullet = Instantiate(bullet, gunTip.position, gunTip.rotation);
-            rifleBullet.GetComponent<Rigidbody2D>().velocity = gunTip.up * bulletSpeed;
+            GameObject rifleBullet = Instantiate(hotBullet, gunTipHot.position, gunTipHot.rotation);
+            rifleBullet.GetComponent<Rigidbody2D>().velocity = gunTipHot.up * bulletSpeed;
             yield return new WaitForSeconds(timeBetweenBullets);
         }
 
         //yield return new WaitForSeconds(0.1f);
         //canShoot = true;
+    }
+
+    public void gotComponent(){
+        ableToChangeMode = true;
     }
 }
